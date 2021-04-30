@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import axios from "axios";
+import { Header, List, ListItem } from "semantic-ui-react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [activities, setActivities] = useState([]);
+
+	useEffect(() => {
+		axios.get("http://localhost:5000/api/activities").then(({ data }) => {
+			console.log(data);
+			setActivities(data);
+		});
+	}, []);
+
+	return (
+		<div className="App">
+			<Header as="h2" icon="users" content="Reactivities" />
+			<List>
+				{activities.map((el: any) => (
+					<ListItem key={el.id}>{el.title}</ListItem>
+				))}
+			</List>
+		</div>
+	);
 }
 
 export default App;
